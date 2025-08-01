@@ -23,18 +23,3 @@ async def mover_cm (CM, drc, vel, acel):
 
     await motor_pair.move_tank_for_degrees(PAIR_1, graus, vel*10, vel*10, stop=motor.HOLD, acceleration=ace_des, deceleration=ace_des)
 
-async def mover_sec (SEC, drc, vel, acel):
-
-    ace_des = 5000 
-
-    global PAIR_1 
-
-    if drc == 't': 
-        vel = -vel
-
-    if acel == 's': 
-        ace_des = 1800
-    else:
-        ace_des = 3000
-
-    await move_tank_for_time(PAIR_1, vel*10, vel*10, SEC*1000, stop=motor.HOLD, acceleration=ace_des, deceleration=ace_des)
