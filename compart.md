@@ -14,6 +14,12 @@
 
 ---
 
+### Variáveis
+- CM = centímetros
+- drc = direção
+- vel = velocidade
+- acel = aceleração
+
 ### Importações:
 #### As importações são componentes essenciais do nosso código, pois é por meio delas que trazemos bibliotecas externas para complementar nossa programação. Abaixo está um exemplo das bibliotecas que utilizamos:
 
