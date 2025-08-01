@@ -44,16 +44,34 @@ async def mover_cm (CM, drc, vel, acel):
 ```
 
 
-#### Agora, vamos para a parte da aceleração e desaceleração padrões de acordo com a nossa necessidade, essa variável será definida mais a frente por nós. 
-#### Também 
+#### Agora passamos para a configuração dos valores padrão de aceleração e desaceleração, ajustados conforme a nossa necessidade. Essa variável será definida mais adiante por nós.
+#### Também realizamos a importação da variável `global PAIR_1`, que já havia sido declarada anteriormente como o par principal de motores — conectados nas portas "E" e "F".
+
 ```python
     ace_des = 5000 
 
     global PAIR_1 
 ```
+
+
+#### Aqui temos uma parte essencial do nosso código: a conversão de distância (em centímetros) para graus de rotação do motor. Como as funções pré-definidas do Python para o Spike Prime não permitem o uso direto de centímetros, utilizamos a fórmula: `(centímetros / circunferência da roda) * 360`. Isso nos permite trabalhar com medidas em centímetros no nosso programa, convertendo automaticamente para graus, que é a unidade aceita pelo controle dos motores.
+
 ```python
     graus = int ((CM/19.60)*360)
 ```
+
+
+#### Esse trecho do nosso código está dividido em duas partes principais:
+
+#### 1. Direção do movimento:
+- Verificamos se a direção está definida como "trás". Nesse caso, a velocidade será negativa, indicando que o robô deve se mover para trás.
+
+#### 2. Configuração da aceleração: Verificamos se a opção de aceleração está ativada.
+
+- Se estiver, utilizamos o valor 1800, que é um padrão adotado por nós com base no comportamento do Python para o Spike Prime.
+
+- Caso contrário, utilizamos o valor 3000, representando uma aceleração mais suave ou ausente.
+
 ```python
     if drc == 't': 
         graus = -graus
@@ -63,24 +81,21 @@ async def mover_cm (CM, drc, vel, acel):
     else:
         ace_des = 3000
 ```
+
+
+#### Agora entramos na parte prática do nosso código. É aqui que colocamos em ação todas as definições feitas anteriormente, utilizando a função motor_pair.`move_tank_for_degrees()`.
+#### Nessa função, passamos os seguintes parâmetros:
+- Par de motores: utilizamos a variável global que define os motores principais.
+
+- Graus: o valor calculado a partir da conversão dos centímetros para graus.
+
+- Velocidade: multiplicamos nossa velocidade por 10, já que o Python para Spike Prime usa uma escala de 0 a 1000.
+
+- Parada: usamos o modo HOLD, que mantém os motores travados após o movimento.
+
+- Aceleração e desaceleração: passamos a variável ace_des, que já foi configurada anteriormente conforme nossa lógica.
+
 ```python
     await motor_pair.move_tank_for_degrees(PAIR_1, graus, vel*10, vel*10, stop=motor.HOLD, acceleration=ace_des, deceleration=ace_des)
 ```
 
-```python
-async def mover_sec (SEC, drc, vel, acel):
-
-    ace_des = 5000 
-
-    global PAIR_1 
-
-    if drc == 't': 
-        vel = -vel
-
-    if acel == 's': 
-        ace_des = 1800
-    else:
-        ace_des = 3000
-
-    await move_tank_for_time(PAIR_1, vel*10, vel*10, SEC*1000, stop=motor.HOLD, acceleration=ace_des, deceleration=ace_des)
-```
